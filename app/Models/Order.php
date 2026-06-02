@@ -4,6 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Order model.
+ * @property int $id
+ * @property int $user_id
+ * @property float $total_price
+ * @property string $status
+ */
 class Order extends Model
 {
     protected $fillable = [

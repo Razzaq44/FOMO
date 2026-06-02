@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model representing a shopping cart.
+ * 
+ * @property int $id
+ * @property int $user_id
+ */
 class Cart extends Model
 {
     protected $fillable = [

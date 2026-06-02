@@ -90,4 +90,43 @@ class CartController extends Controller
 
         return $this->successResponse(null, 'Product successfully removed from cart');
     }
+
+    /**
+     * Clear all items from the cart.
+     */
+    public function clearCart(): JsonResponse
+    {
+        $cart = Cart::where('user_id', Auth::id())->first();
+
+        if (!$cart) {
+            return $this->notFoundResponse('Cart not found');
+        }
+
+        CartItem::where('cart_id', $cart->id)->delete();
+
+        return $this->successResponse(null, 'Cart cleared successfully');
+    }
+
+    /**
+     * Update the quantity of a specific product in the cart.
+     * 
+     * @param int $productId The ID of the product to update
+     */
+    public function updateCartItem(Request $request, int $productId): JsonResponse
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $cart = Cart::where('user_id', Auth::id())->first();
+
+        if (!$cart) {
+            return $this->notFoundResponse('Cart not found');
+        }
+
+        $cart->quantity = $request->quantity;
+        $cart->save();
+
+        return $this->successResponse(null, 'Cart updated successfully');
+    }
 }

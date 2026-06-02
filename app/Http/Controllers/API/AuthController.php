@@ -47,7 +47,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string|min:8',
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -72,5 +72,13 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return $this->successResponse(null, 'Logged out successfully');
+    }
+
+    /**
+     * Get the authenticated User.
+     */
+    public function userProfile(Request $request): JsonResponse
+    {
+        return $this->successResponse($request->user(), 'User profile retrieved successfully');
     }
 }
