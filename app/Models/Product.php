@@ -21,4 +21,11 @@ class Product extends Model
         'stock',
         'image',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+        ];
+    }
 }

@@ -28,4 +28,11 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'total_price' => 'decimal:2',
+        ];
+    }
 }

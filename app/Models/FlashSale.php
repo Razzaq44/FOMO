@@ -28,4 +28,11 @@ class FlashSale extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'flash_sale_price' => 'decimal:2',
+        ];
+    }
 }

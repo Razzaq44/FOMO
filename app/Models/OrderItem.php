@@ -22,4 +22,11 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+        ];
+    }
 }
