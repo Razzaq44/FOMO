@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItems extends Model
+class OrderItem extends Model
 {
     protected $fillable = [
         'order_id',
@@ -15,11 +15,18 @@ class OrderItems extends Model
 
     public function order()
     {
-        return $this->belongsTo(Orders::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+        ];
     }
 }
