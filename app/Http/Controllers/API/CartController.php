@@ -124,8 +124,16 @@ class CartController extends Controller
             return $this->notFoundResponse('Cart not found');
         }
 
-        $cart->quantity = $request->quantity;
-        $cart->save();
+        $cartItem = CartItem::where('cart_id', $cart->id)
+            ->where('product_id', $productId)
+            ->first();
+
+        if (!$cartItem) {
+            return $this->notFoundResponse('Product not found in cart');
+        }
+
+        $cartItem->quantity = $request->quantity;
+        $cartItem->save();
 
         return $this->successResponse(null, 'Cart updated successfully');
     }

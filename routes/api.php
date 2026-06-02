@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\AuthController;
@@ -8,14 +7,19 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\CheckOutController;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+// Public routes for authentication
+Route::middleware('throttle:auth_endpoints')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 // Public product routes
-Route::get('/products', [ProductController::class, 'listProducts']);
-Route::get('/products/{id}', [ProductController::class, 'productDetails']);
+Route::middleware('throttle:global_api')->group(function () {
+    Route::get('/products', [ProductController::class, 'listProducts']);
+    Route::get('/products/{id}', [ProductController::class, 'productDetails']);
+});
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:global_api'])->group(function () {
     // User profile routes
     Route::get('/profile', [AuthController::class, 'userProfile']);
 

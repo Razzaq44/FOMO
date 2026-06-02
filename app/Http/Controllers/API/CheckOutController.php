@@ -69,7 +69,7 @@ class CheckOutController extends Controller
 
                     if ($flashSale) {
                         if ($flashSale->flash_sale_stock < $item->quantity) {
-                            DB::Rollback();
+                            DB::rollBack();
                             return $this->errorResponse("Not enough flash sale stock for product {$flashSale->product->name}", 400);
                         }
 
@@ -80,12 +80,12 @@ class CheckOutController extends Controller
                         $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
 
                         if (!$product) {
-                            DB::Rollback();
+                            DB::rollBack();
                             return $this->errorResponse('Product not found', 404);
                         }
 
                         if ($product->stock < $item->quantity) {
-                            DB::Rollback();
+                            DB::rollBack();
                             return $this->errorResponse("Not enough stock for product {$product->name}", 400);
                         }
 
@@ -116,7 +116,7 @@ class CheckOutController extends Controller
 
                 if ($flashSale) {
                     if ($flashSale->flash_sale_stock < $quantity) {
-                        DB::Rollback();
+                        DB::rollBack();
                         return $this->errorResponse("Not enough flash sale stock for product {$flashSale->product->name}", 400);
                     }
 
@@ -127,12 +127,12 @@ class CheckOutController extends Controller
                     $product = Product::where('id', $productId)->lockForUpdate()->first();
 
                     if (!$product) {
-                        DB::Rollback();
+                        DB::rollBack();
                         return $this->errorResponse('Product not found', 404);
                     }
 
                     if ($product->stock < $quantity) {
-                        DB::Rollback();
+                        DB::rollBack();
                         return $this->errorResponse("Not enough stock for product {$product->name}", 400);
                     }
 

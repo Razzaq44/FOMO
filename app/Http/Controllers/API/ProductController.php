@@ -60,7 +60,7 @@ class ProductController extends Controller
             return $query->whereBetween('price', [$min, $max]);
         });
 
-        $products->paginate($perPage);
+        $products = $products->paginate($perPage);
 
         return $this->successResponse($products, 'Products retrieved successfully');
     }
