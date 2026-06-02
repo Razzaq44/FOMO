@@ -103,4 +103,43 @@ class CheckOutApiTest extends TestCase
         $response->assertStatus(200);
         $this->assertDatabaseHas('orders', ['id' => $order->id, 'status' => 'cancelled']);
     }
+
+    /**
+     * Test race condition ability.
+     * Proves that even with multiple requests, we cannot sell more than available stock.
+     */
+    public function test_race_condition_protection_on_flash_sale_stock()
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create(['stock' => 100]);
+
+        $flashSale = FlashSale::create([
+            'product_id' => $product->id,
+            'flash_sale_price' => 100,
+            'flash_sale_stock' => 5,
+            'start_time' => now()->subHour(),
+            'end_time' => now()->addHour(),
+        ]);
+
+        $successCount = 0;
+        $failCount = 0;
+
+        for ($i = 0; $i < 10; $i++) {
+            $response = $this->actingAs($user, 'sanctum')
+                ->postJson('/api/checkout', [
+                    'checkout_type' => 'buy_now',
+                    'product_id' => $product->id,
+                    'quantity' => 1
+                ]);
+
+            if ($response->status() === 200)
+                $successCount++;
+            if ($response->status() === 400)
+                $failCount++;
+        }
+
+        $this->assertEquals(5, $successCount, "Hanya 5 order yang boleh sukses");
+        $this->assertEquals(5, $failCount, "5 order lainnya harus gagal karena stok habis");
+        $this->assertDatabaseHas('flash_sales', ['id' => $flashSale->id, 'flash_sale_stock' => 0]);
+    }
 }

@@ -106,13 +106,13 @@ class CheckOutController extends Controller
             } else {
                 $flashSale = FlashSale::where('product_id', $productId)
                     ->where('start_time', '<=', now())
-                    ->where('end_time', '>=', now());
-
-                if ($flashSaleId) {
-                    $flashSale = $flashSale->where('id', $flashSaleId);
-                }
-
-                $flashSale = $flashSale->lockForUpdate()->first();
+                    ->where('end_time', '>=', now())
+                    ->where('flash_sale_stock', '>', 0)
+                    ->when($flashSaleId, function ($query, $flashSaleId) {
+                        return $query->where('id', $flashSaleId);
+                    })
+                    ->lockForUpdate()
+                    ->first();
 
                 if ($flashSale) {
                     if ($flashSale->flash_sale_stock < $quantity) {
