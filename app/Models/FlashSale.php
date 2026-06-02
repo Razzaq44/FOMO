@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FlashSales extends Model
+class FlashSale extends Model
 {
     protected $fillable = [
         'product_id',
