@@ -44,11 +44,11 @@ class ProductController extends Controller
         $products = Product::query();
 
         $products->when($search, function ($query, $search) {
-            return $query->where('name', 'ilike', '%' . $search . '%')
-                ->orWhere('description', 'ilike', '%' . $search . '%');
+            return $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
         });
 
-        $products->when($order, function ($query, $order, $direction) {
+        $products->when($order, function ($query, $order) use ($direction) {
             return $query->orderBy($order, $direction);
         });
 
@@ -91,9 +91,12 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'sku' => 'required|string|unique:products,sku',
+            'slug' => 'required|string|unique:products,slug',
+            'image' => 'nullable|string',
         ]);
 
-        $product = Product::create($request->only('name', 'description', 'price', 'stock'));
+        $product = Product::create($request->only('name', 'description', 'price', 'stock', 'sku', 'slug', 'image'));
 
         return $this->createdResponse($product, 'Product created successfully');
     }
@@ -116,9 +119,12 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'nullable|numeric|min:0',
             'stock' => 'nullable|integer|min:0',
+            'sku' => 'nullable|string|unique:products,sku,' . $productId,
+            'slug' => 'nullable|string|unique:products,slug,' . $productId,
+            'image' => 'nullable|string',
         ]);
 
-        $product->update($request->only('name', 'description', 'price', 'stock'));
+        $product->update($request->only('name', 'description', 'price', 'stock', 'sku', 'slug', 'image'));
 
         return $this->successResponse($product, 'Product updated successfully');
     }

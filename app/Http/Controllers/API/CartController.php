@@ -118,7 +118,13 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $cart = Cart::where('user_id', Auth::id())->first();
+        $user = Auth::user();
+
+        if (!$user) {
+            return $this->unauthorizedResponse();
+        }
+
+        $cart = $user->cart()->first();
 
         if (!$cart) {
             return $this->notFoundResponse('Cart not found');

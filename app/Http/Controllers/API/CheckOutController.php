@@ -109,7 +109,7 @@ class CheckOutController extends Controller
                     ->where('end_time', '>=', now());
 
                 if ($flashSaleId) {
-                    $flashSale = FlashSale::where('id', $flashSaleId);
+                    $flashSale = $flashSale->where('id', $flashSaleId);
                 }
 
                 $flashSale = $flashSale->lockForUpdate()->first();
