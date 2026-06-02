@@ -44,8 +44,8 @@ class ProductController extends Controller
         $products = Product::query();
 
         $products->when($search, function ($query, $search) {
-            return $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
+            return $query->where('name', 'ilike', '%' . $search . '%')
+                ->orWhere('description', 'ilike', '%' . $search . '%');
         });
 
         $products->when($order, function ($query, $order) use ($direction) {
