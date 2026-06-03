@@ -1,12 +1,5 @@
 # FOMO API
 
-<p align="center">
-    <img src="https://img.shields.io/badge/Laravel-11-red?style=for-the-badge&logo=laravel" alt="Laravel 11">
-    <img src="https://img.shields.io/badge/PostgreSQL-latest-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL">
-</p>
-
-FOMO adalah backend API e-commerce yang dibangun dengan Laravel 11. Proyek ini mencakup fitur manajemen produk, keranjang belanja, dan sistem checkout yang aman dengan dukungan Flash Sale.
-
 ## 🚀 Fitur Utama
 
 - **Authentication**: Laravel Sanctum (Bearer Token).
@@ -28,6 +21,7 @@ FOMO adalah backend API e-commerce yang dibangun dengan Laravel 11. Proyek ini m
 ## 📖 Dokumentasi
 
 Akses dokumentasi API di: `http://localhost:8000/docs/api`
+Akses public website: `https://fomo-production-5d5e.up.railway.app/`
 
 ---
 © 2026 FOMO Project.
